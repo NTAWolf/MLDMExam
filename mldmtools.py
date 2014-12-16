@@ -6,6 +6,12 @@ import itertools as IT
 Use this toolbox either as an imported module, or in e.g. ipython with the magic %paste command 
 to import w.e. is in you clipboard; that could be the jaccard function or one of the other tools.
 
+Also, cheap hack to import it as a module:
+
+import sys
+sys.path.append(r'/Users/Thorbjorn/DTU/1st semester/Data mining/MLDMExam') # <-- put your path here
+from mldmtools import *
+
 Note to self:
 Itemset finder with regex
 
@@ -15,6 +21,8 @@ Itemset finder with regex
 
 
 def jaccard(a,b):
+    if len(a) != len(b):
+        raise ValueError("a and b must have same length")
     _11 = 0
     _not00 = 0
     for x,y in zip(a,b):
@@ -26,13 +34,32 @@ def jaccard(a,b):
     return float(_11)/float(_not00)
 
 """
-Use of jaccard:
+Ugly use of jaccard:
 for i1 in range(5):
     for i2 in range(5):
         if i1 >= i2:
             continue
         print i1+1, i2+1, 1 - jaccard(_ns[i1], _ns[i2])
 """
+
+def simple_matching_coefficient(a,b):
+    if len(a) != len(b):
+        raise ValueError("a and b must have same length")
+    matching = 0
+    for x,y in zip(a,b):
+        if x == y:
+            matching += 1
+       
+    return float(matching)/len(a)
+
+def cosine_similarity(a,b):
+    if len(a) != len(b):
+        raise ValueError("a and b must have same length")
+    dot = sum([x*y for x,y in zip(a,b)])
+    eLenA = np.sqrt(sum([x*x for x in a]))
+    eLenB = np.sqrt(sum([x*x for x in b]))
+
+    return dot / (eLenA * eLenB)
 
 
 def gini(vec):
@@ -45,11 +72,19 @@ def gini(vec):
     return (1 - summed)
 
 def classification_error(vec):
+    # 1 - max over i(p(i|t)), 
+    # p(i|t) is the fraction of objects belonging to class i on node t
     return 1 - float(pd.Series(vec).value_counts()[0])/len(vec)
 
 def purity_gain(parent, children, measure_method=gini):
     """
     Usage: purity_gain([1,0,1,0], [[0,0],[1,1]], gini)
+    Example from Spring2011 Q2:
+        bsplit = list('s'*12 + 'w'*10 + 'c'*10 + 'u'*8) # REMEMBER to put them in a list!
+        a1 = list('s'*4 + 'w'*8 + 'c'*3 + 'u'*1)
+        a2 = list('s'*8 + 'w'*2 + 'c'*7 + 'u'*7)
+
+        purity_gain(bsplit, [a1, a2], classification_error)
     """
     # break early:
     children[0][1] # breaks if you're e.g. just passing a 1d list of chars

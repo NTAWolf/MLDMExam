@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-
+import itertools as IT
 
 """
 Use this toolbox either as an imported module, or in e.g. ipython with the magic %paste command 
@@ -120,6 +120,38 @@ def classification_stats(TP, TN, FP, FN):
     }
 
     return output
+
+
+def support(itemset):
+    """
+    Returns the support value for the given itemset
+    itemset is a pandas dataframe with one row per basket, and one column per item
+    """
+
+    # Get the count of baskets where all the items are 1
+    baskets = itemset.iloc[:,0].copy()
+    for col in itemset.columns[1:]:
+        baskets = baskets & itemset[col]
+
+    return baskets.sum() / float(len(baskets))
+
+
+def itemsets(df, support_min):
+    """
+    df is a pandas dataframe, with each row being a basket, and each column being an item
+    You can really really really benefit from writing the table in a text editor, copying it,
+    and using pd.from_clipboard().
+    """
+    itemsets = []
+    n = len(df)
+    for itsetSize in np.arange(1, len(df.columns) + 1): # Start with 1-itemsets, keep going till n_attributes-itemsets
+        for combination in IT.combinations(df.columns, itsetSize):
+            sup = support(df[list(combination)])
+            if sup > support_min:
+                itemsets.append(set(combination))
+
+    return itemsets
+
 
 
 # Wrapper methods

@@ -55,12 +55,19 @@ def simple_matching_coefficient(a,b):
 def cosine_similarity(a,b):
     if len(a) != len(b):
         raise ValueError("a and b must have same length")
-    dot = sum([x*y for x,y in zip(a,b)])
-    eLenA = np.sqrt(sum([x*x for x in a]))
-    eLenB = np.sqrt(sum([x*x for x in b]))
+    dp = dot(a,b)
+    eLenA = euclidian_length(a)
+    eLenB = euclidian_length(b)
 
-    return dot / (eLenA * eLenB)
+    return dp / (eLenA * eLenB)
 
+def dot(a,b):
+    if len(a) != len(b):
+        raise ValueError("a and b must have same length")
+    return sum([x*y for x,y in zip(a,b)])
+
+def euclidian_length(a):
+    return np.sqrt(sum([x*x for x in a]))
 
 def gini(vec):
     # It is 1 minus the sum over i of p_i^2, where p_i is the fraction of records belonging to class i.
@@ -187,6 +194,9 @@ def itemsets(df, support_min):
 
     return itemsets
 
+
+
+# Consider implementing k-nearest neighbours for 
 
 
 # Wrapper methods

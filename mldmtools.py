@@ -94,3 +94,17 @@ def pca_accountability(singular_values):
 
 
 
+# Wrapper methods
+
+def mean(vals):
+    return pd.Series(vals).mean()
+
+def median(vals):
+    return pd.Series(vals).median()
+
+def mode(vals):
+    return pd.Series(vals).mode()
+
+def valuerange(vals):
+    ser = pd.Series(vals)
+    return ser.max() - ser.min()

@@ -177,6 +177,18 @@ def support(itemset):
 
     return baskets.sum() / float(len(baskets))
 
+def confidence(df, antecedentCols, consequentCols):
+    """
+    df is a pandas dataframe
+    antecedentCols are the labels for the columns/items that make up the antecedent in the association rule
+    consequentCols are the labels for the columns/items that make up the consequent in the association rule
+    """
+    top = support(df[antecedentCols + consequentCols])
+    bottom = support(df[antecedentCols])
+
+    return top/bottom
+
+
 
 def itemsets(df, support_min):
     """

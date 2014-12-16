@@ -79,3 +79,18 @@ def standardise(vec, ddof=0):
     vm = np.mean(vec)
     vs = np.std(vec, ddof=ddof)
     return [(x - vm)/vs for x in vec]
+
+def pca_accountability(singular_values):
+    """
+    Answers the eternal question: How much variability does the nth principal component account for?
+    Returns the fraction of variability accounting for each of the elements in singular_values, order preserved.
+    """
+
+    squared = [x*x for x in singular_values]
+    svsum = float(sum(squared))
+    ratio = [x / svsum for x in squared]
+    return ratio
+
+
+
+

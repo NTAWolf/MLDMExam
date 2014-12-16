@@ -92,6 +92,34 @@ def pca_accountability(singular_values):
     return ratio
 
 
+def classification_stats(TP, TN, FP, FN):
+    count = TP + TN + FP + FN
+    error_rate = float(FP + FN) / count
+    TPR = TP / float(TP + FN)
+    FPR = FP / float(TN + FP)
+    FNR = FN / float(TP + FN)
+    TNR = TN / float(TN + FP)
+    sensitivity = TPR
+    specificity = TN
+    precision = TP / float(TP + FP)
+    recall = TP / float(TP + FN)
+    F1 = 2 * TP / float(2 * TP + FP + FN)
+
+    output = {
+        'count': count,
+        'error_rate': error_rate,
+        'TPR': TPR,
+        'FPR': FPR,
+        'FNR': FNR,
+        'TNR': TNR,
+        'sensitivity': sensitivity,
+        'specificity': specificity,
+        'precision': precision,
+        'recall': recall,
+        'F1': F1
+    }
+
+    return output
 
 
 # Wrapper methods
@@ -108,3 +136,5 @@ def mode(vals):
 def valuerange(vals):
     ser = pd.Series(vals)
     return ser.max() - ser.min()
+
+

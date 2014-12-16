@@ -1,8 +1,13 @@
 import pandas as pd
 import numpy as np
 
+
 """
-Itemset finder
+Use this toolbox either as an imported module, or in e.g. ipython with the magic %paste command 
+to import w.e. is in you clipboard; that could be the jaccard function or one of the other tools.
+
+Note to self:
+Itemset finder with regex
 
 ^\s+([01]\s+){1}1\s+([01]\s+){4}1
 """
@@ -64,6 +69,7 @@ def least_square(A, y):
     """
     A = np.vstack([np.ones(len(A)), A]).T
     return np.linalg.lstsq(A, y)[0]
+
 
 def standardise(vec, ddof=0):
     """
